@@ -1,11 +1,12 @@
-# 🌱 goGreen 
+# 🌱 goGreen
 
-With **goGreen**, you can make your profile look like you've been hard at work... even if you haven't. 
-NodeJs script to make commits to the past (or the future) to go green on GitHub.
+goGreen is a local Git contribution-graph experiment tool. It generates dated commits so you can test contribution visualizations, calendar patterns, and Git workflows in a disposable repository.
+
+It should not be used to misrepresent professional activity, coursework, or open-source contributions.
 
 ## About
 
-**goGreen** helps you create commits on your GitHub profile for any date in the past. Whether you want to fill up your contribution graph or even make cool patterns and artwork.
+The tool creates one small `data.json` change per generated date. It previews every date and a calendar before it can write or push anything.
 
 ## Getting Started
 
@@ -17,22 +18,28 @@ Preview 100 unique random dates from the previous 365 completed days:
 node index.js
 ```
 
-Create and push the commits only after reviewing the preview:
+Use `--seed` when you need the same preview again:
 
 ```bash
-node index.js --count 100 --days 365 --push
+node index.js --count 20 --days 90 --seed classroom-demo
 ```
 
-The working tree must be clean before `--push` is accepted. Each generated commit
-changes only `data.json`, and all commits are pushed after the full batch succeeds.
+Pushing requires a clean working tree, a dedicated non-default branch, a GitHub `origin`, and explicit `--yes` confirmation:
 
-## Room for Improvement
+```bash
+git switch -c experiment/contribution-calendar
+node index.js --count 100 --days 365 --seed classroom-demo --push --yes
+```
 
-So, you've got the basics down. What's next?
+Each generated commit changes only `data.json`, and commits are pushed to the current branch only after the full preview has been shown.
 
-- **Custom Patterns:** Experiment with different patterns on your contribution graph. Maybe spell out your name or create some cool designs.
-- **Density Control:** Play around with the number of commits per day to adjust the shades of green.
-- **Input Strings:** Convert input strings to X-Y mapped contributions.
+## Safety
+
+- Dry run is the default.
+- `--push` without `--yes` is rejected.
+- `main` and `master` are always rejected.
+- The origin must point to GitHub.
+- The working tree must be clean before any commits are created.
 
 ## Tests
 
